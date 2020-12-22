@@ -1,0 +1,20 @@
+{
+  "service": {
+    "host": "os-viewscreen-svc.cloudos-viewscreen.svc.cloudos",
+    "name": "os-viewscreen-server",
+    "port": 18989,
+    "protocol": "http",
+    "connect_timeout": 120000,
+    "write_timeout": 120000,
+    "read_timeout": 120000
+  },
+  "routes": [{
+    "protocols": ["http"],
+    "paths": ["/viewscreen/"],
+    "strip_path": true
+  }],
+  "serviceExtra": {
+    "tokenType": "keystone",
+    "authHeaderType": "X-Auth-Token"
+  }
+}

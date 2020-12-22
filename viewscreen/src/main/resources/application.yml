@@ -1,0 +1,148 @@
+server:
+  port: 18989
+  tomcat:
+    uri-encoding: UTF-8
+    max-connections: 10000
+  servlet:
+    context-path: /bigscreen
+spring:
+  #Redis配置
+  redis:
+    #Redis数据库索引  默认0
+    database: 0
+    #Redis服务器地址
+    host: ${REDIS_SVC_HOST:127.0.0.1}
+    #Redis服务器连接端口
+    port: ${REDIS_SVC_PORT:6379}
+    #Redis密码
+    password: ${REDIS_SVC_PWD:Vdi@redis@1234}
+    jedis:
+      pool:
+        #连接池最大连接数,使用负值表示没有限制
+        max-active: 1000
+        #连接池最大阻塞等待时间,使用负值表示没有限制
+        max-wait: 1000
+        #连接池最大空闲连接数
+        max-idle: 100
+        #连接池最小空闲连接数
+        min-idle: 0
+        #连接超时时间,默认是毫秒
+    timeout: 10000
+
+  #Kafka配置
+  #  kafka:
+  #    #指定kafka地址
+  #    bootstrap-servers: 10.99.207.85:9092
+  #    #消息生产配置
+  #    producer:
+  #      #发送失败重试次数
+  #      retries: 0
+  #      #每次批量发送消息数量
+  #      batch-size: 16384
+  #      #即32MB的批处理缓冲区
+  #      buffer-memory: 33554432
+  #      #序列化方式
+  #      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+  #      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  #    #消费者配置
+  #    consumer:
+  #      group-id: test-consumer-group
+  #      #Kafka中没有初始偏移或如果当前偏移在服务器上不再存在时,默认区最新 ，有三个选项 【latest, earliest, none】
+  #      auto-offset-reset: earliest
+  #      #是否开启自动提交
+  #      enable-auto-commit: false
+  #      #自动提交的时间间隔
+  #      auto-commit-interval: 100
+  #      #解码方式
+  #      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  #      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  #    listener:
+  #      ack-mode: manual
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 200MB
+  datasource:
+    url: jdbc:mysql://${MYSQL_SVC_HOST:127.0.0.1}:${MYSQL_SVC_PORT:3306}/viewscreen?createDatabaseIfNotExist=true&useSSL=false&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: ${MYSQL_SVC_USER:root}
+    password: ${MYSQL_SVC_PWD:1q2w3e}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      #自动创建|更新|验证数据库表结构
+      ddl-auto: none
+      naming:
+        #直接映射，不会做过多的处理
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    #sql暂时设置开启，生产环境上需要关闭
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    #设置数据库引擎
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+
+knife4j:
+  production: false
+  basic:
+    enable: true
+    username: admin
+    password: admin
+
+
+# SpringBoot 开启全部监控功能
+#management:
+#  endpoints:
+#    web:
+#      base-path: /actuator
+#      exposure:
+#        include: "*"
+logging:
+  config:
+  classpath: logback-spring.xml
+  level:
+    com.h3c.vdi.viewscreen: info
+#    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+
+#云上调用cloudos接口环境变量
+cloud:
+  gateway:
+    kong:
+      url: ${KONG_SVC_HOST:os-kong-proxy-svc.default.svc.cloudos}
+      port: ${KONG_SVC_PORT:11000}
+
+
+#区分云上云下本地环境变量
+vdi:
+  service:
+    provider:
+      viewscreen: ${VDI_SERVICE_PROVIDER_VIEWSCREEN:local}
+
+#文件存储位置
+uploadSavePath: /opt/viewscreen/services/viewscreen/file
+
+
+
+workspace:
+  protocol: http
+  port: 8083
+  maxConnection: 100
+  perRouteConnection: 100
+  username: root
+  password: root@123
+
+
+

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="true" scanPeriod="300 seconds">
+
+    <!--设置上下文名称，默认为default，可通过%contextName来打印上下文名称，一般不使用此属性。-->
+    <contextName>logback</contextName>
+
+    <!--设置存储路径变量-->
+    <property name="LOG_HOME" value="/var/viewscreen/log"/>
+
+
+    <!--控制台输出appender-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!--设置输出格式-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <!--设置编码-->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--文件输出,时间窗口滚动-->
+    <appender name="timeFileOutput" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志名,指定最新的文件名，其他文件名使用FileNamePattern -->
+        <File>${LOG_HOME}/timeFile/viewscreen.log</File>
+        <!--文件滚动模式-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名,可设置文件类型为gz,开启文件压缩-->
+            <FileNamePattern>${LOG_HOME}/timeFile/info.%d{yyyy-MM-dd}.%i.log.gz</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>30</MaxHistory>
+            <!--按大小分割同一天的-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+        <!--输出格式-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <!--设置编码-->
+            <charset>UTF-8</charset>
+        </encoder>
+
+    </appender>
+
+    <!--指定基础的日志输出级别-->
+    <!--输出优先级，即DEBUG,INFO,WARN,ERROR,FATAL-->
+    <root level="INFO">
+        <!--appender将会添加到这个loger-->
+        <appender-ref ref="console"/>
+        <appender-ref ref="timeFileOutput"/>
+    </root>
+
+    <!--用于打印sql参数-->
+    <!--    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>-->
+
+
+
+    
+    <!--    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/var/log/viewscreen/viewscreen.log</file>
+            <encoder>
+                <pattern>
+                    %date{yyyy-MM-dd HH:mm:ss.SSS}[%-5level][%thread][%X{request.uuid}][%X{remote.addr}]%logger{96}.%method
+                    [%line] - %msg%n
+                </pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                &lt;!&ndash;注意这个路径会在编译脚本里替换为系统变量，不要随便改&ndash;&gt;
+                <fileNamePattern>/var/log/viewscreen/viewscreen%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+                &lt;!&ndash; 单个日志文件最多500MB &ndash;&gt;
+                <MaxFileSize>50MB</MaxFileSize>
+                <maxHistory>20</maxHistory>
+                &lt;!&ndash;真实系统里，log分区最大只有20G&ndash;&gt;
+                <totalSizeCap>1GB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
+
+        <root level="info">
+            <appender-ref ref="FILE"/>
+        </root>-->
+
+</configuration>
